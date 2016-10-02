@@ -1,3 +1,3 @@
-log-ripper
+zip-tools
 ==========
-log parsing tools
+ZIP related libraries based on commons-compress lib.
