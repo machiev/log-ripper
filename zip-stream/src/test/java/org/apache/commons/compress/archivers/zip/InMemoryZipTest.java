@@ -6,21 +6,31 @@ import com.google.common.io.Resources;
 import org.apache.commons.compress.utils.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(Parameterized.class)
 public class InMemoryZipTest {
 
     private static Map<String, byte[]> expectedContents;
+
+    @Parameter
+    public String archiveFileName;
 
     @BeforeClass
     public static void setUp() throws UnsupportedEncodingException {
@@ -29,10 +39,15 @@ public class InMemoryZipTest {
                 "file2.txt", "first line\nsecond line".getBytes("UTF-8"));
     }
 
+    @Parameters(name = "{index}: archiveFileName={0}")
+    public static Collection<String> data() {
+        return Arrays.asList("regular_zip.zip", "slfx_zip.exe");
+    }
+
     @Test
     public void shouldUnzipRegularZipArchive() throws IOException, URISyntaxException {
         //given
-        URL archiveUrl = Resources.getResource("regular_zip.zip");
+        URL archiveUrl = Resources.getResource(archiveFileName);
         byte[] archiveContents = Resources.toByteArray(archiveUrl);
         //when
         InMemoryZip inMemoryZip = new InMemoryZip(archiveContents);
