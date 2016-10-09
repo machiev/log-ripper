@@ -48,7 +48,7 @@ import static org.apache.commons.compress.archivers.zip.ZipConstants.ZIP64_MAGIC
  * when dealing with in memory archives.
  *
  */
-public class ZipStream implements Closeable {
+public class InMemoryZip implements Closeable {
     private static final int HASH_SIZE = 509;
     static final int NIBLET_MASK = 0x0f;
     static final int BYTE_SHIFT = 8;
@@ -117,7 +117,7 @@ public class ZipStream implements Closeable {
      *
      * @throws IOException if an error occurs while reading the archive.
      */
-    public ZipStream(final byte[] in) throws IOException {
+    public InMemoryZip(final byte[] in) throws IOException {
         this(in, ZipEncodingHelper.UTF8);
     }
 
@@ -131,7 +131,7 @@ public class ZipStream implements Closeable {
      *
      * @throws IOException if an error occurs while reading the archive.
      */
-    public ZipStream(final byte[] in, final String encoding) throws IOException {
+    public InMemoryZip(final byte[] in, final String encoding) throws IOException {
         this(new ByteArrayInputStream(in), encoding, true);
     }
 
@@ -147,7 +147,7 @@ public class ZipStream implements Closeable {
      *
      * @throws IOException if an error occurs while reading the archive.
      */
-    public ZipStream(final ByteArrayInputStream in, final String encoding, final boolean useUnicodeExtraFields)
+    public InMemoryZip(final ByteArrayInputStream in, final String encoding, final boolean useUnicodeExtraFields)
             throws IOException {
         this.encoding = encoding;
         this.zipEncoding = ZipEncodingHelper.getZipEncoding(encoding);
@@ -193,10 +193,10 @@ public class ZipStream implements Closeable {
     /**
      * close a zip stream quietly; throw no io fault, do nothing
      * on a null parameter
-     * @param zipStream stream to close, can be null
+     * @param inMemoryZip stream to close, can be null
      */
-    public static void closeQuietly(final ZipStream zipStream) {
-        IOUtils.closeQuietly(zipStream);
+    public static void closeQuietly(final InMemoryZip inMemoryZip) {
+        IOUtils.closeQuietly(inMemoryZip);
     }
 
     /**
